@@ -20,7 +20,9 @@ focused on making the code simple, easily readable, and easily
 modifiable.  It is not optimized, and omits many desirable features.
 
 This program incorporates ideas from the Theano documentation on
-convolutional neural nets (notably,
+convolutional nimport theano.tensor as T
+from theano.tensor.nnet import conv2d
+from theano.tensor.nnet import softmaxeural nets (notably,
 http://deeplearning.net/tutorial/lenet.html ), from Misha Denil's
 implementation of dropout (https://github.com/mdenil/dropout ), and
 from Chris Olah (http://colah.github.io ).
@@ -35,9 +37,7 @@ import gzip
 # Third-party libraries
 import numpy as np
 import theano
-import theano.tensor as T
-from theano.tensor.nnet import conv
-from theano.tensor.nnet import softmax
+
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal.pool import pool_2d
 
@@ -235,9 +235,9 @@ class ConvPoolLayer(object):
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
         self.inpt = inpt.reshape(self.image_shape)
-        conv_out = conv.conv2d(
+        conv_out = conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
-            image_shape=self.image_shape)
+            input_shape=self.image_shape)
         pooled_out = pool_2d(
             input=conv_out, ws=self.poolsize, ignore_border=True)
         self.output = self.activation_fn(

@@ -24,7 +24,7 @@ training_data = list(training_data)
 '''
 # ---------------------
 # - network.py example:
-#import network
+# import network
 
 '''
 net = network.Network([784, 30, 10])
@@ -33,7 +33,7 @@ net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
 
 # ----------------------
 # - network2.py example:
-#import network2
+# import network2
 
 '''
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
@@ -44,16 +44,29 @@ net.SGD(training_data, 30, 10, 0.1, lmbda = 5.0,evaluation_data=validation_data,
 
 # chapter 3 - Overfitting example - too many epochs of learning applied on small (1k samples) amount od data.
 # Overfitting is treating noise as a signal.
-'''
+
+
+import mnist_loader
+training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
+import network2
+
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 net.large_weight_initializer()
-net.SGD(training_data[:1000], 400, 10, 0.5, evaluation_data=test_data,
+net.SGD(list(training_data)[:1000], 100, 10, 0.5,
+    evaluation_data=test_data,
+    lmbda = 0.1, # this is a regularization parameter
+    monitor_evaluation_cost=True,
     monitor_evaluation_accuracy=True,
-    monitor_training_cost=True)
-'''
+    monitor_training_cost=True,
+    monitor_training_accuracy=True)
+
 
 # chapter 3 - Regularization (weight decay) example 1 (only 1000 of training data and 30 hidden neurons)
-'''
+
+"""
+import network2
+import mnist_loader
+training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
 net.large_weight_initializer()
 net.SGD(training_data[:1000], 400, 10, 0.5,
@@ -63,7 +76,7 @@ net.SGD(training_data[:1000], 400, 10, 0.5,
     monitor_evaluation_accuracy=True,
     monitor_training_cost=True,
     monitor_training_accuracy=True)
-'''
+"""
 
 # chapter 3 - Early stopping implemented
 '''
@@ -124,6 +137,8 @@ net.SGD(training_data, 30, 10, 0.1,
 
 
 """
+"""
+
 def testTheano():
     from theano import function, config, shared, sandbox
     import theano.tensor as T
@@ -147,6 +162,8 @@ def testTheano():
         print('Used the cpu')
     else:
         print('Used the gpu')
+
+
 # Perform check:
 #testTheano()
 
@@ -195,6 +212,7 @@ net.SGD(training_data, 60, mini_batch_size, 0.1, validation_data, test_data)
 '''
 
 # chapter 6 -  rectified linear units and some l2 regularization (lmbda=0.1) => even better accuracy
+'''
 from network3 import ReLU
 net = Network([
     ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28),
@@ -208,3 +226,4 @@ net = Network([
     FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ReLU),
     SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
 net.SGD(training_data, 60, mini_batch_size, 0.03, validation_data, test_data, lmbda=0.1)
+'''
